@@ -6,7 +6,7 @@
 CONTAINER_ENGINE ?= $(shell command -v docker 2>/dev/null || command -v podman 2>/dev/null || echo docker)
 DOCKER_REGISTRY ?= docker.io/changeme
 SERVICE_NAME = service-nginx
-SERVICE_VERSION = 1.0.0
+SERVICE_VERSION ?= 1.0.0
 DOCKER_IMAGE_BASE = $(DOCKER_REGISTRY)/$(SERVICE_NAME)
 
 # Get current architecture
@@ -63,21 +63,21 @@ check-env:
 ## build: Build container image for current architecture
 build:
 	@echo "Building $(SERVICE_NAME):$(SERVICE_VERSION) for $(ARCH) using $(CONTAINER_ENGINE)..."
-	$(CONTAINER_ENGINE) build -t $(DOCKER_IMAGE_BASE)_$(ARCH):$(SERVICE_VERSION) .
+	$(CONTAINER_ENGINE) build --build-arg SERVICE_VERSION=$(SERVICE_VERSION) -t $(DOCKER_IMAGE_BASE)_$(ARCH):$(SERVICE_VERSION) .
 	$(CONTAINER_ENGINE) tag $(DOCKER_IMAGE_BASE)_$(ARCH):$(SERVICE_VERSION) $(DOCKER_IMAGE_BASE)_$(ARCH):latest
 	@echo "Build complete: $(DOCKER_IMAGE_BASE)_$(ARCH):$(SERVICE_VERSION)"
 
 ## build-amd64: Build container image for amd64 architecture
 build-amd64:
 	@echo "Building $(SERVICE_NAME):$(SERVICE_VERSION) for amd64 using $(CONTAINER_ENGINE)..."
-	$(CONTAINER_ENGINE) build --platform linux/amd64 -t $(DOCKER_IMAGE_BASE)_amd64:$(SERVICE_VERSION) .
+	$(CONTAINER_ENGINE) build --build-arg SERVICE_VERSION=$(SERVICE_VERSION) --platform linux/amd64 -t $(DOCKER_IMAGE_BASE)_amd64:$(SERVICE_VERSION) .
 	$(CONTAINER_ENGINE) tag $(DOCKER_IMAGE_BASE)_amd64:$(SERVICE_VERSION) $(DOCKER_IMAGE_BASE)_amd64:latest
 	@echo "Build complete: $(DOCKER_IMAGE_BASE)_amd64:$(SERVICE_VERSION)"
 
 ## build-arm64: Build container image for arm64 architecture
 build-arm64:
 	@echo "Building $(SERVICE_NAME):$(SERVICE_VERSION) for arm64 using $(CONTAINER_ENGINE)..."
-	$(CONTAINER_ENGINE) build --platform linux/arm64 -t $(DOCKER_IMAGE_BASE)_arm64:$(SERVICE_VERSION) .
+	$(CONTAINER_ENGINE) build --build-arg SERVICE_VERSION=$(SERVICE_VERSION) --platform linux/arm64 -t $(DOCKER_IMAGE_BASE)_arm64:$(SERVICE_VERSION) .
 	$(CONTAINER_ENGINE) tag $(DOCKER_IMAGE_BASE)_arm64:$(SERVICE_VERSION) $(DOCKER_IMAGE_BASE)_arm64:latest
 	@echo "Build complete: $(DOCKER_IMAGE_BASE)_arm64:$(SERVICE_VERSION)"
 
@@ -90,7 +90,7 @@ build-all-arches:
 			docker buildx create --name multiarch --use; \
 			docker buildx inspect --bootstrap; \
 		fi; \
-		docker buildx build --platform linux/amd64,linux/arm64 \
+		docker buildx build --build-arg SERVICE_VERSION=$(SERVICE_VERSION) --platform linux/amd64,linux/arm64 \
 			-t $(DOCKER_IMAGE_BASE)_amd64:$(SERVICE_VERSION) \
 			-t $(DOCKER_IMAGE_BASE)_amd64:latest \
 			-t $(DOCKER_IMAGE_BASE)_arm64:$(SERVICE_VERSION) \
@@ -98,10 +98,10 @@ build-all-arches:
 			--push .; \
 	else \
 		echo "Building for amd64..."; \
-		podman build --no-cache --platform linux/amd64 -t $(DOCKER_IMAGE_BASE)_amd64:$(SERVICE_VERSION) .; \
+		podman build --build-arg SERVICE_VERSION=$(SERVICE_VERSION) --no-cache --platform linux/amd64 -t $(DOCKER_IMAGE_BASE)_amd64:$(SERVICE_VERSION) .; \
 		podman tag $(DOCKER_IMAGE_BASE)_amd64:$(SERVICE_VERSION) $(DOCKER_IMAGE_BASE)_amd64:latest; \
 		echo "Building for arm64..."; \
-		podman build --no-cache --platform linux/arm64 -t $(DOCKER_IMAGE_BASE)_arm64:$(SERVICE_VERSION) .; \
+		podman build --build-arg SERVICE_VERSION=$(SERVICE_VERSION) --no-cache --platform linux/arm64 -t $(DOCKER_IMAGE_BASE)_arm64:$(SERVICE_VERSION) .; \
 		podman tag $(DOCKER_IMAGE_BASE)_arm64:$(SERVICE_VERSION) $(DOCKER_IMAGE_BASE)_arm64:latest; \
 		echo "Pushing images..."; \
 		podman push $(DOCKER_IMAGE_BASE)_amd64:$(SERVICE_VERSION); \

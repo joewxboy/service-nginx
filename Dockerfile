@@ -3,9 +3,12 @@
 
 FROM nginx:latest
 
+# Build argument for version
+ARG SERVICE_VERSION=1.0.0
+
 # Metadata
 LABEL maintainer="joe.pearson@us.ibm.com"
-LABEL version="1.0.0"
+LABEL version="${SERVICE_VERSION}"
 LABEL description="Open Horizon nginx service with customizable message"
 LABEL org.opencontainers.image.source="https://github.com/joewxboy/service-nginx"
 
