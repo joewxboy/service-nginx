@@ -1,9 +1,12 @@
 # Multi-architecture Dockerfile for Open Horizon Nginx Service
 # Supports: amd64 (x86_64) and arm64 (aarch64)
 
+# Build argument for version (declared before FROM for base image selection if needed)
+ARG SERVICE_VERSION=1.0.0
+
 FROM nginx:latest
 
-# Build argument for version
+# Re-declare ARG after FROM to make it available in this build stage
 ARG SERVICE_VERSION=1.0.0
 
 # Metadata
