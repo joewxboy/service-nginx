@@ -5,7 +5,7 @@
   "public": true,
   "documentation": "https://github.com/joewxboy/service-nginx",
   "url": "service-nginx",
-  "version": "1.0.0",
+  "version": "$SERVICE_VERSION",
   "arch": "$ARCH",
   "sharable": "multiple",
   "requiredServices": [],
