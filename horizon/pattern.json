@@ -1,0 +1,49 @@
+{
+  "name": "pattern-service-nginx",
+  "label": "Nginx Web Server Pattern",
+  "description": "Deployment pattern for nginx web server service with customizable message",
+  "public": true,
+  "services": [
+    {
+      "serviceUrl": "service-nginx",
+      "serviceOrgid": "$HZN_ORG_ID",
+      "serviceArch": "amd64",
+      "serviceVersions": [
+        {
+          "version": "1.0.0",
+          "priority": {},
+          "upgradePolicy": {}
+        }
+      ],
+      "dataVerification": {},
+      "nodeHealth": {}
+    },
+    {
+      "serviceUrl": "service-nginx",
+      "serviceOrgid": "$HZN_ORG_ID",
+      "serviceArch": "arm64",
+      "serviceVersions": [
+        {
+          "version": "1.0.0",
+          "priority": {},
+          "upgradePolicy": {}
+        }
+      ],
+      "dataVerification": {},
+      "nodeHealth": {}
+    }
+  ],
+  "userInput": [
+    {
+      "serviceOrgid": "$HZN_ORG_ID",
+      "serviceUrl": "service-nginx",
+      "serviceVersionRange": "[0.0.0,INFINITY)",
+      "inputs": [
+        {
+          "name": "message",
+          "value": "Hello from Open Horizon!"
+        }
+      ]
+    }
+  ]
+}
