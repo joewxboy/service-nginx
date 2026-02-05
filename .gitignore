@@ -1,0 +1,71 @@
+# Open Horizon Service - .gitignore
+
+# Docker build artifacts
+*.tar
+*.tar.gz
+
+# Open Horizon credentials and keys
+horizon/*.key
+horizon/*.pem
+*.key
+*.pem
+
+# Environment files with secrets
+.env
+.env.local
+*.env
+
+# Horizon agent files
+/horizon/agent-install.cfg
+/horizon/agent-install.sh
+
+# Build artifacts
+build/
+dist/
+*.log
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Node modules (if using any JS tooling)
+node_modules/
+
+# Python virtual environments (if using any Python tooling)
+venv/
+env/
+*.pyc
+__pycache__/
+
+# Test coverage
+coverage/
+*.coverage
+
+# Local test files
+test-output/
+*.test
+
+# Backup files
+*.bak
+*.backup
+
+# OS generated files
+Thumbs.db
+.Spotlight-V100
+.Trashes
+
+# Docker compose override
+docker-compose.override.yml
+
+# Local configuration overrides
+config.local.json
+settings.local.json

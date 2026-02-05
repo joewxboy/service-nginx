@@ -1,0 +1,36 @@
+{
+  "org": "$HZN_ORG_ID",
+  "label": "Nginx Web Server for $ARCH",
+  "description": "Simple nginx web server with customizable message for Open Horizon edge nodes",
+  "public": true,
+  "documentation": "https://github.com/joewxboy/service-nginx",
+  "url": "service-nginx",
+  "version": "1.0.0",
+  "arch": "$ARCH",
+  "sharable": "multiple",
+  "requiredServices": [],
+  "userInput": [
+    {
+      "name": "message",
+      "label": "Display Message",
+      "type": "string",
+      "defaultValue": "Hello from Open Horizon!"
+    }
+  ],
+  "deployment": {
+    "services": {
+      "nginx": {
+        "image": "${DOCKER_IMAGE_BASE}_$ARCH:$SERVICE_VERSION",
+        "environment": [
+          "MESSAGE=$message"
+        ],
+        "ports": [
+          {
+            "HostPort": "8080:80/tcp",
+            "HostIP": "0.0.0.0"
+          }
+        ]
+      }
+    }
+  }
+}

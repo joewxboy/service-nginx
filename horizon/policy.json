@@ -1,0 +1,50 @@
+{
+  "label": "nginx-deployment-policy",
+  "description": "Deployment policy for nginx web server service",
+  "service": {
+    "name": "service-nginx",
+    "org": "$HZN_ORG_ID",
+    "arch": "*",
+    "serviceVersions": [
+      {
+        "version": "1.0.0",
+        "priority": {
+          "priority_value": 50,
+          "retries": 1,
+          "retry_durations": 3600,
+          "verified_durations": 52
+        },
+        "upgradePolicy": {
+          "lifecycle": "immediate",
+          "time": "01:00AM"
+        }
+      }
+    ],
+    "nodeHealth": {
+      "missing_heartbeat_interval": 600,
+      "check_agreement_status": 120
+    }
+  },
+  "properties": [
+    {
+      "name": "purpose",
+      "value": "web-server"
+    }
+  ],
+  "constraints": [
+    "openhorizon.allowPrivileged == false"
+  ],
+  "userInput": [
+    {
+      "serviceOrgid": "$HZN_ORG_ID",
+      "serviceUrl": "service-nginx",
+      "serviceVersionRange": "[0.0.0,INFINITY)",
+      "inputs": [
+        {
+          "name": "message",
+          "value": "Hello from Open Horizon!"
+        }
+      ]
+    }
+  ]
+}

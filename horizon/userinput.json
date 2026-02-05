@@ -1,0 +1,12 @@
+{
+  "services": [
+    {
+      "org": "$HZN_ORG_ID",
+      "url": "service-nginx",
+      "versionRange": "[0.0.0,INFINITY)",
+      "variables": {
+        "message": "Welcome to my edge node!"
+      }
+    }
+  ]
+}
