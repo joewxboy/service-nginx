@@ -4,7 +4,7 @@
 
 # Variables
 CONTAINER_ENGINE ?= $(shell command -v docker 2>/dev/null || command -v podman 2>/dev/null || echo docker)
-DOCKER_REGISTRY ?= docker.io/joewxboy
+DOCKER_REGISTRY ?= docker.io/changeme
 SERVICE_NAME = service-nginx
 SERVICE_VERSION = 1.0.0
 DOCKER_IMAGE_BASE = $(DOCKER_REGISTRY)/$(SERVICE_NAME)
