@@ -22,11 +22,12 @@ Create a multi-architecture Open Horizon edge service that serves a simple web p
 ```
 service-nginx/
 ├── Dockerfile                    # Multi-arch nginx container
-├── service.json                  # Open Horizon service definition
+├── horizon/
+│   ├── service.definition.json   # Open Horizon service definition
 ├── Makefile                      # Build and publish automation
 ├── horizon/
 │   ├── pattern.json             # Deployment pattern
-│   ├── policy.json              # Deployment policy
+│   ├── service.policy.json      # Deployment policy
 │   └── userinput.json           # Example user input configuration
 ├── nginx/
 │   ├── nginx.conf               # Custom nginx configuration
@@ -60,7 +61,7 @@ service-nginx/
 **Environment Variables**:
 - `MESSAGE`: User-configurable message (default: "Hello from Open Horizon!")
 
-### 2. Service Definition (service.json)
+### 2. Service Definition (horizon/service.definition.json)
 
 **Structure**:
 ```json
@@ -152,7 +153,7 @@ service-nginx/
 - Specify service constraints
 - Set default user input values
 
-**policy.json**:
+**service.policy.json**:
 - Define deployment policy
 - Specify node constraints (architecture, properties)
 - Set service rollback configuration
@@ -333,14 +334,14 @@ service-nginx/
    - Set up Dockerfile and nginx config
 
 2. **Service Implementation** (1 hour)
-   - Create service.json
+- Create horizon/service.definition.json
    - Write entrypoint script
    - Create HTML template
    - Write Makefile
 
 3. **Horizon Configuration** (30 minutes)
    - Create pattern.json
-   - Create policy.json
+- Create service.policy.json
    - Create userinput.json
 
 4. **Documentation** (1.5 hours)

@@ -16,10 +16,14 @@ ARCH ?= $(shell hzn architecture)
 HZN_ORG_ID ?= $(shell hzn node list 2>/dev/null | jq -r '.organization // empty')
 HZN_EXCHANGE_USER_AUTH ?=
 
-# Export variables for service.json substitution
+# Default value for userInput variable (used for verification)
+message ?= Hello from Open Horizon!
+
+# Export variables for horizon/service.definition.json substitution
 export DOCKER_IMAGE_BASE
 export SERVICE_VERSION
 export ARCH
+export message
 
 .PHONY: help build build-amd64 build-arm64 build-all-arches push push-amd64 push-arm64 \
         publish-service publish-service-amd64 publish-service-arm64 publish-all-services \
@@ -133,7 +137,7 @@ publish-service: check-env
 	@echo "=================="
 	@echo "PUBLISHING SERVICE"
 	@echo "=================="
-	@ARCH=$(ARCH) envsubst < service.json > /tmp/service-$(ARCH).json
+	@ARCH=$(ARCH) envsubst < horizon/service.definition.json > /tmp/service-$(ARCH).json
 	@hzn exchange service publish -O -P --json-file=/tmp/service-$(ARCH).json
 	@rm -f /tmp/service-$(ARCH).json
 	@echo "Service published: $(HZN_ORG_ID)/$(SERVICE_NAME)_$(SERVICE_VERSION)_$(ARCH)"
@@ -144,7 +148,7 @@ publish-service-amd64: check-env
 	@echo "=================="
 	@echo "PUBLISHING SERVICE"
 	@echo "=================="
-	@ARCH=amd64 envsubst < service.json > /tmp/service-amd64.json
+	@ARCH=amd64 envsubst < horizon/service.definition.json > /tmp/service-amd64.json
 	@hzn exchange service publish -O -P --json-file=/tmp/service-amd64.json
 	@rm -f /tmp/service-amd64.json
 	@echo "Service published: $(HZN_ORG_ID)/$(SERVICE_NAME)_$(SERVICE_VERSION)_amd64"
@@ -155,7 +159,7 @@ publish-service-arm64: check-env
 	@echo "=================="
 	@echo "PUBLISHING SERVICE"
 	@echo "=================="
-	@ARCH=arm64 envsubst < service.json > /tmp/service-arm64.json
+	@ARCH=arm64 envsubst < horizon/service.definition.json > /tmp/service-arm64.json
 	@hzn exchange service publish -O -P --json-file=/tmp/service-arm64.json
 	@rm -f /tmp/service-arm64.json
 	@echo "Service published: $(HZN_ORG_ID)/$(SERVICE_NAME)_$(SERVICE_VERSION)_arm64"
@@ -203,7 +207,7 @@ publish-deployment-policy: check-env
 	@echo "============================"
 	@echo "PUBLISHING DEPLOYMENT POLICY"
 	@echo "============================"
-	@hzn exchange deployment addpolicy -f horizon/policy.json $(HZN_ORG_ID)/policy-$(SERVICE_NAME)_$(SERVICE_VERSION)
+	@hzn exchange deployment addpolicy -f horizon/service.policy.json $(HZN_ORG_ID)/policy-$(SERVICE_NAME)_$(SERVICE_VERSION)
 	@echo "Deployment policy published: $(HZN_ORG_ID)/policy-$(SERVICE_NAME)_$(SERVICE_VERSION)"
 	@echo ""
 
@@ -234,10 +238,10 @@ test:
 	@echo "  open http://localhost:8080"
 	@echo ""
 	@echo "View logs with:"
-	@echo "  $(CONTAINER_ENGINE) logs -f nginx-test"
+	@echo "  make logs"
 	@echo ""
 	@echo "Stop with:"
-	@echo "  $(CONTAINER_ENGINE) stop nginx-test && $(CONTAINER_ENGINE) rm nginx-test"
+	@echo "  make stop-test"
 
 ## test-custom-message: Run service locally with custom message
 test-custom-message:
@@ -282,6 +286,15 @@ verify-service: check-env
 verify-pattern: check-env
 	@echo "Verifying pattern in Exchange..."
 	@hzn exchange pattern list $(HZN_ORG_ID)/pattern-$(SERVICE_NAME) | jq .
+
+## dev-verify: Verify service definition locally with hzn dev
+dev-verify:
+	@echo "Verifying service definition..."
+	@export DOCKER_IMAGE_BASE=$(DOCKER_IMAGE_BASE) && \
+	 export SERVICE_VERSION=$(SERVICE_VERSION) && \
+	 export message="$(message)" && \
+	 hzn dev service verify
+	@echo "✓ Service definition verified successfully"
 
 ## logs: View logs from local test container
 logs:

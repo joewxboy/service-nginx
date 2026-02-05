@@ -294,6 +294,28 @@ The service uses these environment variables internally:
 |----------|-------------|
 | `MESSAGE` | The message to display (set from userInput) |
 
+## Verification
+
+### Service Definition Verification
+
+Before publishing, verify your service definition is valid:
+
+```bash
+# Verify service definition with default values
+make dev-verify
+
+# Or verify with custom values
+message="Custom test message" make dev-verify
+```
+
+This runs `hzn dev service verify` with all required environment variables properly set, ensuring:
+- Service definition JSON is valid
+- All referenced environment variables are defined
+- Docker image references are correct
+- UserInput variables are properly configured
+
+**Note**: The `dev-verify` target automatically exports `DOCKER_IMAGE_BASE`, `SERVICE_VERSION`, and `message` variables with their default values, eliminating the warnings that would otherwise appear when running `hzn dev service verify` directly.
+
 ## Testing
 
 ### Local Container Testing
@@ -434,11 +456,12 @@ hzn exchange service list $HZN_ORG_ID/service-nginx
 ```
 service-nginx/
 ├── Dockerfile              # Multi-arch container definition
-├── service.json            # Open Horizon service definition
+├── horizon/
+│   ├── service.definition.json  # Open Horizon service definition
 ├── Makefile                # Build and publish automation
 ├── horizon/
 │   ├── pattern.json       # Deployment pattern
-│   ├── policy.json        # Deployment policy
+│   ├── service.policy.json  # Deployment policy
 │   └── userinput.json     # Example user input
 ├── nginx/
 │   ├── nginx.conf         # Nginx configuration
@@ -459,7 +482,7 @@ service-nginx/
 ### Making Changes
 
 1. Modify the service code
-2. Update version in Makefile and service.json
+2. Update version in Makefile and horizon/service.definition.json
 3. Build and test locally
 4. Publish updated service
 5. Update documentation
@@ -468,7 +491,7 @@ service-nginx/
 
 - Modify `nginx/html/index.html` for UI changes
 - Update `nginx/nginx.conf` for server configuration
-- Add new userInput variables in `service.json`
+- Add new userInput variables in `horizon/service.definition.json`
 - Update `scripts/entrypoint.sh` for new environment variables
 
 ## Contributing

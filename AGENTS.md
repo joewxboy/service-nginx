@@ -130,7 +130,7 @@ Agent: "Here's a deployment policy for ARM devices only:
 }
 
 Save this to a file and publish with:
-hzn exchange deployment addpolicy -f policy.json nginx-arm-policy
+hzn exchange deployment addpolicy -f service.policy.json nginx-arm-policy
 "
 ```
 

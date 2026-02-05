@@ -17,8 +17,9 @@ RUN apt-get update && \
 # Copy nginx configuration
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
-# Copy HTML template
+# Copy HTML template and assets
 COPY nginx/html/index.html.template /usr/share/nginx/html/index.html.template
+COPY nginx/html/openhorizon-icon-color.svg /usr/share/nginx/html/openhorizon-icon-color.svg
 
 # Copy entrypoint script
 COPY scripts/entrypoint.sh /scripts/entrypoint.sh
